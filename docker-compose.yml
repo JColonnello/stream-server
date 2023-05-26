@@ -7,6 +7,8 @@ services:
       context: mediamtx
     environment:
       - MTX_PROTOCOLS=tcp
+    volumes:
+      - ./mediamtx/mediamtx.yml:/mediamtx.yml
     ports:
       # RTSP
       - 8554:8554 
