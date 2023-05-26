@@ -43,14 +43,14 @@ api: no
 apiAddress: 127.0.0.1:9997
 
 # Enable Prometheus-compatible metrics.
-metrics: no
+metrics: yes
 # Address of the metrics listener.
-metricsAddress: 127.0.0.1:9998
+metricsAddress: :9998
 
 # Enable pprof-compatible endpoint to monitor performances.
-pprof: no
+pprof: yes
 # Address of the pprof listener.
-pprofAddress: 127.0.0.1:9999
+pprofAddress: :9999
 
 # Command to run when a client connects to the server.
 # This is terminated with SIGINT when a client disconnects from the server.
