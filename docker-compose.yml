@@ -3,6 +3,7 @@ version: '3.8'
 services:
   media:
     image: mediamtx-custom
+    container_name: media
     build:
       context: mediamtx
     environment:
@@ -38,9 +39,8 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - /etc/prometheus:/etc/prometheus
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
-    command: "--config.file=/etc/prometheus/prometheus.yml"
     restart: unless-stopped
   
   cadvisor:
