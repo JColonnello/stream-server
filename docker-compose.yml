@@ -10,6 +10,7 @@ services:
       - MTX_PROTOCOLS=tcp
     volumes:
       - ./mediamtx/mediamtx.yml:/mediamtx.yml
+      - ./recordings:/recordings
     ports:
       # RTSP
       - 8554:8554 

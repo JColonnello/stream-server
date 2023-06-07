@@ -456,3 +456,14 @@ paths:
     runOnRead:
     # Restart the command if it exits suddenly.
     runOnReadRestart: no
+  stream-1_publish:
+    runOnReady: ffmpeg -i rtsp://localhost:$RTSP_PORT/$RTSP_PATH -c copy -f segment -strftime 1 -segment_time 10 -segment_format mpegts /recordings/stream-1.ts
+    runOnReadyRestart: yes
+  stream-1:
+    runOnDemand: ffmpeg -i rtsp://localhost:$RTSP_PORT/stream-1_publish -c:v libx264 -preset ultrafast -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+    runOnDemandRestart: yes
+    disablePublisherOverride: yes
+  stream-1_recording:
+    runOnDemand: ffmpeg -re -i "/recordings/stream-1.ts" -c copy -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+    runOnDemandRestart: yes
+    disablePublisherOverride: yes
