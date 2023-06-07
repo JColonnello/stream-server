@@ -43,32 +43,6 @@ services:
       - prometheus-data:/prometheus
     restart: unless-stopped
   
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest 
-    container_name: cadvisor
-    ports:
-      - 8080:8080
-    network_mode: host
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    devices:
-      - /dev/kmsg
-    privileged: true
-    restart: unless-stopped
-
-  # node_exporter:
-  #   image: prom/node-exporter:latest
-  #   container_name: node_exporter
-  #   command: "--path.rootfs=/host"
-  #   pid: host
-  #   restart: unless-stopped
-  #   volumes:
-  #     - /:/host:ro,rslave
-      
 volumes:
   grafana-data:
     driver: local
