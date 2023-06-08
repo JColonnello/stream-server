@@ -457,13 +457,45 @@ paths:
     # Restart the command if it exits suddenly.
     runOnReadRestart: no
   stream-1_publish:
-    runOnReady: ffmpeg -i rtsp://localhost:$RTSP_PORT/$RTSP_PATH -c copy -f segment -strftime 1 -segment_time 10 -segment_format mpegts /recordings/stream-1.ts
+    runOnReady: ffmpeg -i rtsp://localhost:$RTSP_PORT/$RTSP_PATH -c copy -f segment -strftime 1 -segment_time 15 -segment_format mpegts -segment_list /recordings/stream-1.ffcat /recordings/stream-1_%Y-%m-%d_%H-%M-%S.ts
     runOnReadyRestart: yes
-  stream-1:
-    runOnDemand: ffmpeg -i rtsp://localhost:$RTSP_PORT/stream-1_publish -c:v libx264 -preset ultrafast -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+  stream-2_publish:
+    runOnReady: ffmpeg -i rtsp://localhost:$RTSP_PORT/$RTSP_PATH -c copy -f segment -strftime 1 -segment_time 15 -segment_format mpegts -segment_list /recordings/stream-2.ffcat /recordings/stream-2_%Y-%m-%d_%H-%M-%S.ts
+    runOnReadyRestart: yes
+
+  stream-1_x264:
+    runOnDemand: ffmpeg -i rtsp://localhost:$RTSP_PORT/stream-1_publish -c:v libx264 -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
     runOnDemandRestart: yes
     disablePublisherOverride: yes
-  stream-1_recording:
-    runOnDemand: ffmpeg -re -i "/recordings/stream-1.ts" -c copy -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+  stream-1_x265:
+    runOnDemand: ffmpeg -i rtsp://localhost:$RTSP_PORT/stream-1_publish -c:v libx265 -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
     runOnDemandRestart: yes
+    disablePublisherOverride: yes
+  stream-1_vp9:
+    runOnDemand: ffmpeg -i rtsp://localhost:$RTSP_PORT/stream-1_publish -c:v libvpx-vp9 -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+    runOnDemandRestart: yes
+    disablePublisherOverride: yes
+
+  stream-1_opus:
+    runOnDemand: ffmpeg -i rtsp://localhost:$RTSP_PORT/stream-1_publish -c:a libopus -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+    runOnDemandRestart: yes
+    disablePublisherOverride: yes
+  stream-1_g722:
+    runOnDemand: ffmpeg -i rtsp://localhost:$RTSP_PORT/stream-1_publish -c:a g722 -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+    runOnDemandRestart: yes
+    disablePublisherOverride: yes
+  stream-1_mp3:
+    runOnDemand: ffmpeg -i rtsp://localhost:$RTSP_PORT/stream-1_publish -c:a libmp3lame -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+    runOnDemandRestart: yes
+    disablePublisherOverride: yes
+
+  stream-1_recording:
+    runOnDemand: ffmpeg -re -i "/recordings/stream-1.ffcat" -c copy -rtpflags latm -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+    runOnDemandRestart: yes
+    runOnDemandCloseAfter: 0s
+    disablePublisherOverride: yes
+  stream-2_recording:
+    runOnDemand: ffmpeg -re -i "/recordings/stream-2.ffcat" -c copy -rtpflags latm -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+    runOnDemandRestart: yes
+    runOnDemandCloseAfter: 0s
     disablePublisherOverride: yes
